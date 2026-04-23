@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import RtsLabs from '../components/RtsLabs.astro';
+import Contact from '../components/Contact.astro';
+import { getCollection } from 'astro:content';
+import { readFileSync } from 'fs';
+import matter from 'gray-matter';
+
+// Load content files
+const hero = matter(readFileSync('src/content/hero.md', 'utf-8'));
+const about = matter(readFileSync('src/content/about.md', 'utf-8'));
+const contact = matter(readFileSync('src/content/contact.md', 'utf-8'));
+const rts = matter(readFileSync('src/content/rts-labs.md', 'utf-8'));
+
+// Load projects
+const allProjects = await getCollection('projects');
+const featured = allProjects
+  .filter((p) => p.data.tier === 'featured')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const kite = allProjects.find((p) => p.data.slug === 'kite');
+
+// Simple markdown to HTML
+function md(text: string): string {
+  return text
+    .trim()
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .split(/\n\n+/)
+    .map((block) => {
+      block = block.trim();
+      if (!block) return '';
+      if (block.startsWith('## ')) {
+        return `<h2>${block.slice(3)}</h2>`;
+      }
+      if (block.startsWith('- ') || block.startsWith('* ')) {
+        const items = block.split('\n').map((line) => `<li>${line.replace(/^[-*] /, '')}</li>`).join('');
+        return `<ul>${items}</ul>`;
+      }
+      if (block.startsWith('*') && block.endsWith('*') && !block.startsWith('**')) {
+        return `<p><em>${block.slice(1, -1)}</em></p>`;
+      }
+      return `<p>${block}</p>`;
+    })
+    .join('\n');
+}
+---
+
+<BaseLayout title="Patrick Suijk — AI Engineer & Tech Lead">
+  <Hero
+    name={hero.data.name}
+    tagline={hero.data.tagline}
+    supporting={hero.data.supporting}
+    links={hero.data.links}
+  />
+
+  <About heading={about.data.heading} content={md(about.content)} />
+
+  <section class="px-6 py-12">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-semibold mb-8 tracking-tight">Projects</h2>
+      <div class="flex flex-col gap-4">
+        {featured.map((project) => (
+          <ProjectCard
+            title={project.data.title}
+            slug={project.data.slug}
+            oneLiner={project.data.oneLiner}
+            status={project.data.status}
+            stack={project.data.stack}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <RtsLabs
+    heading={rts.data.heading}
+    intro={rts.data.intro}
+    content={md(rts.content)}
+  />
+
+  {kite && (
+    <section class="px-6 py-12">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-lg font-medium text-[var(--color-muted)] mb-4">Also building</h2>
+        <ProjectCard
+          title={kite.data.title}
+          slug={kite.data.slug}
+          oneLiner={kite.data.oneLiner}
+          status={kite.data.status}
+          stack={kite.data.stack}
+        />
+      </div>
+    </section>
+  )}
+
+  <Contact heading={contact.data.heading} content={md(contact.content)} />
+
+  <footer class="px-6 py-12 text-center">
+    <p class="text-xs text-[var(--color-muted)]">&copy; {new Date().getFullYear()} Patrick Suijk</p>
+  </footer>
+</BaseLayout>

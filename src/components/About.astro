@@ -1,0 +1,35 @@
+---
+interface Props {
+  heading: string;
+  content: string;
+}
+
+const { heading, content } = Astro.props;
+---
+
+<section class="px-6 py-24">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-8 tracking-tight">{heading}</h2>
+    <div class="prose" set:html={content} />
+  </div>
+</section>
+
+<style>
+  .prose {
+    color: var(--color-text);
+    line-height: 1.7;
+  }
+  .prose :global(p) {
+    margin-bottom: 1.25em;
+  }
+  .prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .prose :global(a:hover) {
+    text-decoration: underline;
+  }
+</style>

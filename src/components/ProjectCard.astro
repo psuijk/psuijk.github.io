@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  oneLiner: string;
+  status: string;
+  stack: string[];
+}
+
+const { title, slug, oneLiner, status, stack } = Astro.props;
+---
+
+<a href={`/projects/${slug}`} class="block group">
+  <article class="border border-[var(--color-border)] rounded-lg p-6 transition-colors hover:border-[color-mix(in_srgb,var(--color-accent)_40%,transparent)]">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+      <h3 class="text-lg font-medium group-hover:text-[var(--color-accent)] transition-colors">{title}</h3>
+      <span class="text-xs font-mono text-[var(--color-accent)] whitespace-nowrap shrink-0">{status}</span>
+    </div>
+    <p class="text-sm text-[var(--color-muted)] mb-4">{oneLiner}</p>
+    <div class="flex flex-wrap gap-2">
+      {stack.map((tech) => (
+        <span class="text-xs font-mono text-[var(--color-muted)] bg-[var(--color-card)] px-2 py-0.5 rounded">{tech}</span>
+      ))}
+    </div>
+  </article>
+</a>

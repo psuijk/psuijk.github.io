@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects
+    .filter((p) => p.data.tier !== 'client')
+    .map((project) => ({
+      params: { slug: project.data.slug },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.title} — Patrick Suijk`}>
+  <article class="px-6 py-24" style="animation: fadeIn 0.6s ease-out both;">
+    <div class="max-w-3xl mx-auto">
+      <nav class="mb-12">
+        <a href="/" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors">&larr; Back</a>
+      </nav>
+
+      <header class="mb-12">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+          <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight">{project.data.title}</h1>
+          <span class="text-xs font-mono text-[var(--color-accent)] whitespace-nowrap shrink-0 sm:mt-2">{project.data.status}</span>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-4">
+          {project.data.stack.map((tech: string) => (
+            <span class="text-xs font-mono text-[var(--color-muted)] bg-[var(--color-card)] px-2 py-0.5 rounded">{tech}</span>
+          ))}
+        </div>
+        {project.data.links.length > 0 && (
+          <div class="flex gap-4">
+            {project.data.links.map((link: { label: string; href: string }) => (
+              <a
+                href={link.href}
+                class="text-sm text-[var(--color-accent)] hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <nav class="mt-16 pt-8 border-t border-[var(--color-border)]">
+        <a href="/" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors">&larr; Back to projects</a>
+      </nav>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+    line-height: 1.7;
+  }
+  .prose :global(h2) {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+  .prose :global(p) {
+    margin-bottom: 1.25em;
+  }
+  .prose :global(ul), .prose :global(ol) {
+    margin-bottom: 1.25em;
+    padding-left: 1.5em;
+  }
+  .prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .prose :global(a:hover) {
+    text-decoration: underline;
+  }
+  .prose :global(em) {
+    color: var(--color-muted);
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  .prose :global(strong) {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-card);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25em;
+  }
+  .prose :global(img) {
+    display: block;
+    margin: 2em auto;
+    max-width: 90%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+</style>
