@@ -21,4 +21,4 @@ The agent uses an iterative refinement workflow: it generates a query, evaluates
 
 A PE firm was pulling economic metrics from many different vendors across its portfolio, each vendor delivering data in their own format. The pipeline I built parses the disparate files, extracts the key metrics, and outputs them in a single uniform shape the firm can actually work with. Cut manual processing time by 33%.
 
-*Stack: Python, AI extraction pipeline.*
+*Stack: Python, Azure Functions, Claude, Gemini.*
