@@ -24,6 +24,12 @@ const { name, tagline, supporting, links } = Astro.props;
     <p class="text-lg text-[var(--color-muted)] mb-16 max-w-xl">{supporting}</p>
 
     <nav class="flex gap-6 flex-wrap">
+      <a
+        href="#projects"
+        class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+      >
+        Projects
+      </a>
       {links.map((link) => (
         <a
           href={link.href}
