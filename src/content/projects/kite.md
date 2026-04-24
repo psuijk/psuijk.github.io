@@ -18,7 +18,9 @@ A personal learning system powered by Claude Code. Open the repo in Claude Code 
 
 ## Why I built it
 
-I work about a hundred hours a week between my day job and my side projects, and a lot of that work is research: reading, talking with LLMs, pushing on ideas to understand them more deeply. The problem is that without recall, most of that doesn't stick. You feel like you learned something, you couldn't explain it a week later. Compounding that, learning conversations happen across whatever tool is convenient that day, so even if you take notes there's no single place those notes live.
+I work about a hundred hours a week between my day job and my side projects, and a lot of that work is research: reading, talking with LLMs, pushing on ideas to understand them more deeply. The problem is that without recall, most of that doesn't stick. You feel like you learned something, you couldn't explain it a week later.
+
+Compounding that, learning conversations happen across whatever tool is convenient that day, so even if you take notes there's no single place those notes live.
 
 Kite started as a way to force recall and consolidate learning across tools. If I have a knowledge graph of everything I've claimed to learn, the system can test me on it, and it can pull in what I've discussed elsewhere.
 

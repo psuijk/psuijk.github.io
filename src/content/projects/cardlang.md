@@ -10,7 +10,7 @@ stack:
   - Node.js
   - Angular
   - Postgres
-  - AWS Lambda
+  - Lambda
   - Neuromod
 links:
   - label: cardlang.ai
@@ -21,7 +21,9 @@ A natural language search engine for Magic: The Gathering cards. Describe what y
 
 ## Why I built it
 
-I play Magic, which means I build a lot of decks, which means I spend a lot of time looking through cards. Magic has tens of thousands of them, and finding the right ones for a deck is its own job. Existing tools don't really solve it. Aggregators like "show me combos with this card" are useful, but they only know what they can scrape from deckbuilder sites, so they lock you into whatever the larger meta is doing. Scryfall and the other search engines are powerful, but they require you to learn a query syntax and chain together operators until you've narrowed the field to something worth reading.
+I play Magic, which means I build a lot of decks, which means I spend a lot of time looking through cards. Magic has tens of thousands of them, and finding the right ones for a deck is its own job.
+
+Existing tools don't really solve it. Aggregators like "show me combos with this card" are useful, but they only know what they can scrape from deckbuilder sites, so they lock you into whatever the larger meta is doing. Scryfall and the other search engines are powerful, but they require you to learn a query syntax and chain together operators until you've narrowed the field to something worth reading.
 
 Working in AI and building agentic systems every day had me circling the same question: why can't I just describe what I want and let an agent find it? So I built that.
 
@@ -37,7 +39,9 @@ The bigger challenge was the load itself. Rewriting the entire card table while 
 
 The LLM piece is the other half. When you type a query, the model doesn't generate SQL directly. It returns a structured representation that a service on my end parses and compiles into SQL against the Postgres database. Keeping the model out of the SQL-writing business means I control exactly what hits the database, which matters both for correctness and for not having to trust model output with query construction.
 
-Context management is another place the design matters. Rather than stuffing every piece of MTG knowledge into the system prompt, the domain knowledge is split into discrete skills, each surfaced to the model as a tool in the agent loop. The model pulls what it needs when it needs it. A lot of MTG information is already in model training data, so assuming the model doesn't know something and flooding the context with it wastes tokens on the common case. Letting the agent *choose* when to reach for a skill keeps context lean when the model already knows the answer and gives it a clean escape hatch when it doesn't.
+Context management is another place the design matters. Rather than stuffing every piece of MTG knowledge into the system prompt, the domain knowledge is split into discrete skills, each surfaced to the model as a tool in the agent loop. The model pulls what it needs when it needs it.
+
+A lot of MTG information is already in model training data, so assuming the model doesn't know something and flooding the context with it wastes tokens on the common case. Letting the agent *choose* when to reach for a skill keeps context lean when the model already knows the answer and gives it a clean escape hatch when it doesn't.
 
 Model access runs through Neuromod, so Cardlang isn't tied to any single provider. The best model for the task can change monthly, and the code doesn't care.
 
