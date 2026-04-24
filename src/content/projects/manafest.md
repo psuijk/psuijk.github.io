@@ -8,11 +8,10 @@ oneLiner: An MTG companion platform for tracking games, managing decks and playg
 stack:
   - Node.js
   - TypeScript
-  - Drizzle ORM
+  - React
   - Postgres
   - DynamoDB
-  - React
-  - AWS (ECS, Lambda, Step Functions, SNS, SQS, EventBridge, Glue, RDS, S3, CloudFront)
+  - Step Functions
 links:
   - label: manafest.gg (launching soon)
     href: https://manafest.gg
@@ -47,7 +46,9 @@ Commander is Magic's most popular format, and it's the format ManaFest is built 
 - A game has players *and* decks, because what matters is that a specific player brought a specific deck to a specific game.
 - A live game session is its own thing, with its own state, that eventually becomes a recorded game.
 
-Painting all of that as English flattens what it actually feels like to model and query. Loading three hundred games with full relationships can blow past what you want the server holding in memory at once, so the repository layer uses targeted queries and carefully scoped DTOs. We suffered from DTO fragmentation early and had to redesign some of it when the patterns we'd started with stopped scaling.
+Painting all of that as English flattens what it actually feels like to model and query. Loading three hundred games with full relationships can blow past what you want the server holding in memory at once, so the repository layer uses targeted queries and carefully scoped DTOs.
+
+We suffered from DTO fragmentation early and had to redesign some of it when the patterns we'd started with stopped scaling.
 
 Partway through I migrated the backend from TypeORM to Drizzle, which was invasive but paid for itself quickly. Drizzle's ergonomics match how we actually write queries and the type safety is meaningfully better.
 
@@ -55,13 +56,17 @@ Partway through I migrated the backend from TypeORM to Drizzle, which was invasi
 
 Users and playgroups can both be set private, and that introduces a serialization problem most apps get wrong. You can't hide private data by just not rendering it on the frontend. Anyone running a JS app in a browser can inspect the network response and see whatever the server sent. Privacy has to be enforced at the response layer, where the server filters each object based on who's asking for it.
 
-Doing that naively is slow. If every request re-fetches privacy settings and walks every relationship checking visibility, you bloat every endpoint and you pay for it under load. The server does this carefully: resolve visibility once per request against the current viewer, scope queries to return only what that viewer is allowed to see, and build response DTOs that were privacy-aware from the start rather than stripped after the fact.
+Doing that naively is slow. If every request re-fetches privacy settings and walks every relationship checking visibility, you bloat every endpoint and you pay for it under load.
+
+The server does this carefully: resolve visibility once per request against the current viewer, scope queries to return only what that viewer is allowed to see, and build response DTOs that were privacy-aware from the start rather than stripped after the fact.
 
 ## The live game piece
 
 The iOS life counter isn't decorative. It runs an active session with real state: turn order, life totals, per-player tracking, players joining mid-game. That introduces failure modes most MTG apps don't need to think about.
 
-The most interesting one is host failover. The "host" phone is where the live state actually lives, and if it drops, the session needs to survive. Detecting that the host is gone is a timing problem: EventBridge's minimum trigger interval is one minute, which is too slow to feel responsive in a live game. The solution is a Step Function that triggers a Lambda on a 15-second interval, scanning DynamoDB for live sessions whose host has gone stale. When one is found, the server notifies the remaining guests so someone can claim the host role and resume play.
+The most interesting one is host failover. The "host" phone is where the live state actually lives, and if it drops, the session needs to survive. Detecting that the host is gone is a timing problem: EventBridge's minimum trigger interval is one minute, which is too slow to feel responsive in a live game.
+
+The solution is a Step Function that triggers a Lambda on a 15-second interval, scanning DynamoDB for live sessions whose host has gone stale. When one is found, the server notifies the remaining guests so someone can claim the host role and resume play.
 
 That claim is its own can of worms: multiple guests might try to take host at the same moment, and the server has to serialize that race and pick one winner without dropping the game's state. Once a new host is elected, play continues from where it was, and when the game ends the session gets promoted into a recorded game with all the right data attached.
 

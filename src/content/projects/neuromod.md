@@ -6,10 +6,8 @@ tier: featured
 order: 2
 oneLiner: A composable, type-safe LLM inference library with step-function pipelines, Pydantic-based tools, and opt-in thread persistence. TypeScript and Python.
 stack:
-  - Python 3.11+
+  - Python
   - TypeScript
-  - Pydantic
-  - httpx
 links: []
 ---
 
@@ -19,9 +17,13 @@ A composable, type-safe LLM inference library. Step-function pipelines, Pydantic
 
 Every AI job I've had has involved the same two chores: build an abstraction layer to swap models and providers in and out, and build eval suites that exercise that abstraction so you can tell which model is actually best for a given task. That second one becomes critical the week a new model drops and a client wants to know whether to switch.
 
-Along the way I've used most of the existing options. Raw SDKs (Anthropic, OpenAI, Google GenAI, Vercel AI). Heavier frameworks (LangChain, Mastra). The SDKs are minimal but leave you reimplementing the same provider-abstraction and chaining logic every project. The frameworks solve that but bring overcomplicated APIs, heavy dependencies, and a lot of machinery for something that's actually pretty simple once you break it down.
+Along the way I've used most of the existing options. Raw SDKs (Anthropic, OpenAI, Google GenAI, Vercel AI). Heavier frameworks (LangChain, Mastra).
 
-The other thing I kept running into with existing libraries is that the abstractions didn't fit how I actually wanted to build. You're rarely calling a model and returning the raw response. You're chaining steps, routing between specialized agents, gating with intent guardrails (so your embedded chatbot doesn't get turned into a free ChatGPT), tailoring outputs, running expert agents for things like text-to-SQL. Some libraries address pieces of this, but the ergonomics always felt clunky, and I didn't want my projects bottlenecked on someone else's roadmap. A good library should make all of that feel natural without forcing the complexity on people who don't need it.
+The SDKs are minimal but leave you reimplementing the same provider-abstraction and chaining logic every project. The frameworks solve that but bring overcomplicated APIs, heavy dependencies, and a lot of machinery for something that's actually pretty simple once you break it down.
+
+The other thing I kept running into with existing libraries is that the abstractions didn't fit how I actually wanted to build. You're rarely calling a model and returning the raw response. You're chaining steps, routing between specialized agents, gating with intent guardrails (so your embedded chatbot doesn't get turned into a free ChatGPT), tailoring outputs, running expert agents for things like text-to-SQL.
+
+Some libraries address pieces of this, but the ergonomics always felt clunky, and I didn't want my projects bottlenecked on someone else's roadmap. A good library should make all of that feel natural without forcing the complexity on people who don't need it.
 
 Neuromod is that library, shaped by everything I got wrong the first several times.
 

@@ -9,8 +9,7 @@ stack:
   - Python
   - FastAPI
   - React
-  - Multi-provider LLM access
-  - AWS (internal)
+  - AWS
 links: []
 ---
 
@@ -47,9 +46,13 @@ The whole thing is locked behind company SSO and hosted on our internal AWS, so 
 
 ## The pre-sale unlock
 
-The impact that matters most isn't delivery speed, it's pre-sale. Consulting means doing solution architecture for prospective clients, often with genuinely nasty files and a tight turnaround on whether the work is even feasible. Before Chonker Playground, answering "how extractable is this client's data?" meant building scaffolding, writing code, and burning a day or two before you could say anything confident.
+The impact that matters most isn't delivery speed, it's pre-sale. Consulting means doing solution architecture for prospective clients, often with genuinely nasty files and a tight turnaround on whether the work is even feasible.
 
-Now the flow is: paste the meeting notes into the Playground, let it draft the config, drop the sample files the prospect gave us. The whole thing takes under five minutes, and you walk out of that session knowing exactly how extractable the data is and how much of the project actually needs to be built. Sometimes the answer is that the Playground alone is enough and no custom extraction system needs to be built at all. That was always part of the point.
+Before Chonker Playground, answering "how extractable is this client's data?" meant building scaffolding, writing code, and burning a day or two before you could say anything confident.
+
+Now the flow is: paste the meeting notes into the Playground, let it draft the config, drop the sample files the prospect gave us. The whole thing takes under five minutes, and you walk out of that session knowing exactly how extractable the data is and how much of the project actually needs to be built.
+
+Sometimes the answer is that the Playground alone is enough and no custom extraction system needs to be built at all.
 
 Internally, this cut estimation turnaround on extraction projects by 50%.
 
