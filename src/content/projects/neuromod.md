@@ -1,14 +1,16 @@
 ---
 title: Neuromod
 slug: neuromod
-status: Active, publishing soon
+status: Active, Python published
 tier: featured
 order: 2
 oneLiner: A composable, type-safe LLM inference library with step-function pipelines, Pydantic-based tools, and opt-in thread persistence. TypeScript and Python.
 stack:
   - Python
   - TypeScript
-links: []
+links:
+  - label: PyPI
+    href: https://pypi.org/project/neuromod/
 ---
 
 A composable, type-safe LLM inference library. Step-function pipelines, Pydantic-based tools, opt-in thread persistence. Available in TypeScript and Python, with identical design principles across both.
@@ -59,7 +61,7 @@ Python is the other half of my actual stack and has a deeper gravitational pull 
 
 ## Production use
 
-An older version of Neuromod (on my work GitHub) is running in production across several internal client projects. The current public version is running in Cardlang. Publishing to PyPI and npm is coming soon.
+An older version of Neuromod (on my work GitHub) is running in production across several internal client projects. The current public version is running in Cardlang. The Python package is live on PyPI; npm publishing for the TypeScript version is coming soon.
 
 ## Stack
 
