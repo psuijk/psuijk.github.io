@@ -17,11 +17,11 @@ A Python library for structured data extraction from documents, paired with a fu
 
 ## Why I built it
 
-Consulting work kept surfacing the same request: extract structured data from a pile of PDFs. Different clients, different schemas, different file horrors, but structurally the same problem. Every time we spun up a new engagement, someone was rebuilding the same chunking, extraction, and parsing logic from scratch.
+Consulting work kept surfacing the same request: extract structured data from a pile of PDFs. Different clients, different schemas, different document challenges, but structurally the same problem. Every time we spun up a new engagement, someone was rebuilding the same chunking, extraction, and parsing logic from scratch.
 
-I'd come out of NimbleBrain primed to generalize. That's the whole promise of AI in a services context: the task that used to be bespoke becomes configurable. Chonker started as the internal Python library that handles the chunking, extraction, and parsing for you. Point it at a 2-page PDF or a 2000-page PDF, give it a `chonker.config` JSON that declares the fields you want, and it hands back structured output. Each field carries a name, description, default value, and any extraction rules that apply.
+The underlying principle is that in a services context, work that used to be bespoke can become configurable. Chonker started as the internal Python library that handles the chunking, extraction, and parsing for you. Point it at a 2-page PDF or a 2000-page PDF, give it a `chonker.config` JSON that declares the fields you want, and it hands back structured output. Each field carries a name, description, default value, and any extraction rules that apply.
 
-That worked. But the config itself became the friction point. Nested schemas and complex extraction rules take real time to author and validate. So I built the Playground on top.
+That solved the extraction problem, but the config itself became the friction point. Nested schemas and complex extraction rules take real time to author and validate. So I built the Playground on top.
 
 ## Chonker Playground
 
@@ -48,9 +48,9 @@ The whole thing is locked behind company SSO and hosted on our internal AWS, so 
 
 The impact that matters most isn't delivery speed, it's pre-sale. Consulting means doing solution architecture for prospective clients, often with genuinely nasty files and a tight turnaround on whether the work is even feasible.
 
-Before Chonker Playground, answering "how extractable is this client's data?" meant building scaffolding, writing code, and burning a day or two before you could say anything confident.
+Before Chonker Playground, answering "how extractable is this client's data?" meant building scaffolding, writing code, and burning a day or two before providing a confident assessment.
 
-Now the flow is: paste the meeting notes into the Playground, let it draft the config, drop the sample files the prospect gave us. The whole thing takes under five minutes, and you walk out of that session knowing exactly how extractable the data is and how much of the project actually needs to be built.
+Now the flow is: paste the meeting notes into the Playground, let it draft the config, drop in the sample files the prospect provided. The process takes under five minutes and produces a clear answer on how extractable the data is and how much of the project actually needs to be built.
 
 Sometimes the answer is that the Playground alone is enough and no custom extraction system needs to be built at all.
 

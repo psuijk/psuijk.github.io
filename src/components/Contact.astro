@@ -27,17 +27,19 @@ const { heading, content } = Astro.props;
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+    flex-wrap: wrap;
+    gap: 1.5em;
   }
   .prose :global(li) {
-    font-size: 0.95rem;
+    font-size: 0.875rem;
   }
   .prose :global(a) {
-    color: var(--color-accent);
+    color: var(--color-muted);
     text-decoration: none;
+    transition: color 0.2s;
   }
   .prose :global(a:hover) {
-    text-decoration: underline;
+    color: var(--color-accent);
+    text-decoration: none;
   }
 </style>
