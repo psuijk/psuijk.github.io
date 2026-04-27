@@ -17,17 +17,17 @@ A composable, type-safe LLM inference library. Step-function pipelines, Pydantic
 
 ## Why I built it
 
-Every AI job I've had has involved the same two chores: build an abstraction layer to swap models and providers in and out, and build eval suites that exercise that abstraction so you can tell which model is actually best for a given task. That second one becomes critical the week a new model drops and a client wants to know whether to switch.
+Every AI role I've held has involved the same two tasks: build an abstraction layer to swap models and providers in and out, and build eval suites that exercise that abstraction so you can tell which model is actually best for a given task. That second one becomes critical the week a new model drops and a client wants to know whether to switch.
 
-Along the way I've used most of the existing options. Raw SDKs (Anthropic, OpenAI, Google GenAI, Vercel AI). Heavier frameworks (LangChain, Mastra).
+In that process I've worked with most of the existing options. Raw SDKs (Anthropic, OpenAI, Google GenAI, Vercel AI). Heavier frameworks (LangChain, Mastra).
 
-The SDKs are minimal but leave you reimplementing the same provider-abstraction and chaining logic every project. The frameworks solve that but bring overcomplicated APIs, heavy dependencies, and a lot of machinery for something that's actually pretty simple once you break it down.
+The SDKs are minimal but require reimplementing provider abstraction and chaining logic on every project. The frameworks address that but introduce complex APIs, heavy dependencies, and significant overhead for what is fundamentally a composable problem.
 
-The other thing I kept running into with existing libraries is that the abstractions didn't fit how I actually wanted to build. You're rarely calling a model and returning the raw response. You're chaining steps, routing between specialized agents, gating with intent guardrails (so your embedded chatbot doesn't get turned into a free ChatGPT), tailoring outputs, running expert agents for things like text-to-SQL.
+The other limitation I encountered is that existing abstractions didn't align with how I wanted to build. You're rarely calling a model and returning the raw response. You're chaining steps, routing between specialized agents, gating with intent guardrails (so your embedded chatbot doesn't get turned into a free ChatGPT), tailoring outputs, running expert agents for things like text-to-SQL.
 
-Some libraries address pieces of this, but the ergonomics always felt clunky, and I didn't want my projects bottlenecked on someone else's roadmap. A good library should make all of that feel natural without forcing the complexity on people who don't need it.
+Some libraries address pieces of this, but the ergonomics never felt right, and I didn't want my projects dependent on someone else's roadmap. A good library should make all of this feel natural without imposing complexity on users who don't need it.
 
-Neuromod is that library, shaped by everything I got wrong the first several times.
+Neuromod is that library, shaped by the lessons of several earlier iterations.
 
 ## The core idea
 
@@ -39,7 +39,7 @@ That's the entire primitive. It's the thing I kept reaching for in other librari
 - A sub-agent with its own tools and isolation rules is a `scope()` around a step function.
 - An agent is syntactic sugar over a `model()` step, available for when you want readable, reusable units, and peelable when you want to get weird.
 
-The "readable by default, weird on demand" ergonomics are the part I'm proudest of.
+The "readable by default, composable on demand" ergonomics are the design choice I value most.
 
 ## Design principles that came out of doing this wrong repeatedly
 
@@ -51,13 +51,13 @@ The "readable by default, weird on demand" ergonomics are the part I'm proudest 
 - Errors typed by HTTP status. Auth, RateLimit, Network, API.
 - Immutability where practical. Models and tools are frozen. Context updates produce new instances.
 
-These all sound obvious written down. Getting here took several earlier versions where they weren't true and the rough edges stacked up fast.
+These principles sound straightforward in retrospect. Arriving at them took several earlier versions where they weren't true and the resulting friction compounded quickly.
 
 ## Why two languages
 
-TypeScript came first because so much consulting work is AI injected into Node servers. TypeScript is everywhere in that world.
+TypeScript came first because much of my consulting work involves AI integrated into Node servers, where TypeScript is prevalent.
 
-Python is the other half of my actual stack and has a deeper gravitational pull for anything AI or ML. If I had my way it would have been Python-only, but the reality of consulting is that the next project might be either. So both exist, with the same design principles, adapted to each language's idioms rather than mechanically ported.
+Python is the other half of my stack and has stronger alignment with the AI and ML ecosystem. Ideally Neuromod would be Python-only, but in consulting the next project could require either language. So both exist, with the same design principles, adapted to each language's idioms rather than mechanically ported.
 
 ## Production use
 
