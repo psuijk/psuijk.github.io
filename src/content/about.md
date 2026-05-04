@@ -8,7 +8,7 @@ I began as a music producer, spending long hours building tracks in Ableton, and
 
 What drives me is wanting to know how things actually work. For example, when I write TypeScript, I value the importance of having the knowledge to able to trace a blocking I/O call all the way down: through libuv, into the kernel, through the container's namespace, out to the disk controller, and back up through a callback the event loop picks up on its next tick. This depth of comprehension is what separates engineers who understand their systems from engineers who only understand their code.
 
-That desire for detailed understanding is why I gravitate toward infrastructure work, which I am beginning to incorporate into my side projects. I start some of my projects as a solution to a problem I have (for example, both of my Magic: The Gathering apps). I start other projects to understand concepts or domain more deeply.
+That desire for detailed understanding is why I gravitate toward infrastructure work, which I am beginning to incorporate into my side projects. I start some of my projects as a solution to a problem I have (for example, both of my Magic: The Gathering apps). I start other projects to understand concepts or domains more deeply.
 
 I'm looking for AI infrastructure roles, or AI engineering roles with opportunities for advancement. Willing to relocate anywhere for the right role; also open to remote.
 
