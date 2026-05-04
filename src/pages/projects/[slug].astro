@@ -76,7 +76,13 @@ const { Content } = await render(project);
   .prose :global(p) {
     margin-bottom: 1.25em;
   }
-  .prose :global(ul), .prose :global(ol) {
+  .prose :global(ul) {
+    list-style-type: disc;
+    margin-bottom: 1.25em;
+    padding-left: 1.5em;
+  }
+  .prose :global(ol) {
+    list-style-type: decimal;
     margin-bottom: 1.25em;
     padding-left: 1.5em;
   }

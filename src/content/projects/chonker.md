@@ -17,54 +17,54 @@ A Python library for structured data extraction from documents, paired with a fu
 
 ## Why I built it
 
-Consulting work kept surfacing the same request: extract structured data from a pile of PDFs. Different clients, different schemas, different document challenges, but structurally the same problem. Every time we spun up a new engagement, someone was rebuilding the same chunking, extraction, and parsing logic from scratch.
+Consulting work kept surfacing the same request: extract structured data from a pile of PDFs. Different clients, different schemas, different document challenges, but structurally the same problem. Every new engagement meant someone rebuilding the same chunking, extraction, and parsing logic.
 
-The underlying principle is that in a services context, work that used to be bespoke can become configurable. Chonker started as the internal Python library that handles the chunking, extraction, and parsing for you. Point it at a 2-page PDF or a 2000-page PDF, give it a `chonker.config` JSON that declares the fields you want, and it hands back structured output. Each field carries a name, description, default value, and any extraction rules that apply.
+The underlying principle is that in a services context, formerly bespoke work can become configurable. Chonker started as the internal Python library that handles chunking, extraction, and parsing. Pass the library a 2-page PDF or a 2,000-page PDF along with a `chonker.config` JSON declaring the desired fields, and it returns structured output. Each field carries a name, description, default value, and any applicable extraction rules.
 
-That solved the extraction problem, but the config itself became the friction point. Nested schemas and complex extraction rules take real time to author and validate. So I built the Playground on top.
+Chonker solved the extraction problem, but the config was slow to author. Nested schemas and complex extraction rules take real time to write and validate. So I built the Playground on top.
 
 ## Chonker Playground
 
-A FastAPI server wrapping the Chonker library, with a React frontend, built so anyone on the team could create, test, and ship extraction use cases without touching code.
+A FastAPI server wrapping the Chonker library, with a React frontend, built so anyone on the team can create, test, and ship extraction use cases without writing code.
 
-The workflow ends up looking like this:
+The workflow looks like:
 
-- Create a project and a use case inside it. A use case is, under the hood, a config.
+- Create a project and a use case inside the project. A use case maps to a config.
 
 <!-- screenshot: chonker-new-usecase.png -->
 
-- Drop in your Read.ai notes from the client meeting. The Playground uses an AI assist to generate a first-pass config from the notes.
-- Edit the config in a proper UI, no JSON wrangling. Nested objects, field rules, defaults, everything editable in a form.
+- Paste Read.ai notes from the client meeting. The Playground uses an AI assist to generate a first-pass config from the notes.
+- Edit the config in a proper UI — no manual JSON editing. Nested objects, field rules, defaults: everything editable in a form.
 
 <!-- screenshot: chonker-schema-editor.png -->
 
-- Drop sample files in the browser to test extraction immediately and see what comes back.
-- When you're happy with it, either copy the config into your project, or generate API keys for the use case and call the Playground directly. The Playground becomes the extraction backend.
-- Share projects with other devs so you can collaborate on the same use case.
+- Upload sample files in the browser to test extraction immediately and see the results.
+- Once the config is ready, either copy it into the project codebase or generate API keys for the use case and call the Playground directly. The Playground becomes the extraction backend.
+- Share projects with other devs for collaboration on the same use case.
 
-The whole thing is locked behind company SSO and hosted on our internal AWS, so access is limited to people with a company email.
+The Playground is protected by company SSO and hosted on internal AWS, so access requires a company email.
 
 ## The pre-sale unlock
 
-The impact that matters most isn't delivery speed, it's pre-sale. Consulting means doing solution architecture for prospective clients, often with genuinely nasty files and a tight turnaround on whether the work is even feasible.
+The biggest impact isn't delivery speed — it's pre-sale. Consulting means doing solution architecture for prospective clients, often with difficult documents and a short turnaround on whether the work is even feasible.
 
-Before Chonker Playground, answering "how extractable is this client's data?" meant building scaffolding, writing code, and burning a day or two before providing a confident assessment.
+Before Chonker Playground, answering "how extractable is a client's data?" meant building scaffolding, writing code, and spending a day or two before producing a confident assessment.
 
-Now the flow is: paste the meeting notes into the Playground, let it draft the config, drop in the sample files the prospect provided. The process takes under five minutes and produces a clear answer on how extractable the data is and how much of the project actually needs to be built.
+Now the flow is: paste the meeting notes into the Playground, let the AI draft the config, upload the sample files the prospect provided. The process takes under five minutes and produces a clear answer on data extractability and how much of the project actually needs to be built.
 
-Sometimes the answer is that the Playground alone is enough and no custom extraction system needs to be built at all.
+Sometimes the answer is that the Playground alone is sufficient and no custom extraction system needs to be built.
 
-Internally, this cut estimation turnaround on extraction projects by 50%.
+Internally, Chonker Playground cut estimation turnaround on extraction projects by 50%.
 
 ## What's interesting technically
 
 <!-- screenshot: chonker-usecase-edit.png -->
 
 - Provider-agnostic model access, same principle as Neuromod and Golem.
-- Chonker does two distinct things under the hood: it builds its own extraction prompts from your config, and it sends those prompts plus your document to an LLM for extraction. Both steps are independently configurable, so you can use Claude Sonnet 4.6 for prompt construction and Gemini 3.0 for the actual extraction if that's the combination that works best for your use case.
-- The library doesn't care about document size. The chunking strategy lets a 2000-page PDF go through the same code path as a 2-page one.
-- The config schema is the interface contract. Everything above it (the Playground UI, the AI-assisted config generation, the API layer) is just a nicer surface on the same underlying thing.
-- The AI-assisted config generation is the bridge that makes the Playground genuinely usable by non-specialists. Meeting notes in, working config out, iterate in a UI.
+- Chonker performs two distinct steps: it builds extraction prompts from the config, and it sends the prompts plus the document to an LLM for extraction. Both steps are independently configurable — Claude Sonnet 4.6 can handle prompt construction while Gemini 3.0 handles the actual extraction, if that combination produces the best results for a given use case.
+- The library is document-size agnostic. The chunking strategy lets a 2,000-page PDF go through the same code path as a 2-page PDF.
+- The config schema is the interface contract. Everything above the schema — the Playground UI, the AI-assisted config generation, the API layer — is a nicer surface on the same underlying data structure.
+- AI-assisted config generation makes the Playground genuinely usable by non-specialists. Meeting notes in, working config out, iterate in a UI.
 
 ## Stack
 
